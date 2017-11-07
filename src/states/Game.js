@@ -4,6 +4,7 @@ import Player from '../sprites/Player'
 import Meter from '../sprites/Meter'
 import Boomerang from '../sprites/Boomerang'
 import Target from '../sprites/Target'
+import Score from '../sprites/Score'
 
 export default class extends Phaser.State {
     init() {
@@ -44,6 +45,11 @@ export default class extends Phaser.State {
             asset: 'meter',
             bgAsset: 'meterBG',
             boomerang: this.boomerang
+        })
+        this.game.score = new Score({
+            game: this.game,
+            x: 10,
+            y: 10
         })
 
         this.targets = Phaser.ArrayUtils.numberArray(0,2)

@@ -6,6 +6,8 @@ let playerOffset = {
     y: -10
 }
 
+let launchId = 0
+
 export default class extends Phaser.Sprite {
     constructor({game, x, y, asset, player}) {
         super(game, x, y, asset)
@@ -29,6 +31,10 @@ export default class extends Phaser.Sprite {
         }
         this.state = 'flying'
 
+        launchId++
+
+        game.score.setLaunchId(launchId)
+
         this.bmd.cls()
 
         if (this.tween == undefined)
@@ -51,6 +57,12 @@ export default class extends Phaser.Sprite {
 
         this.tween.x.onComplete.add(function(){
             this.state = 'onFloor'
+
+            this.collisionCheck = function () {
+                if (this.game.checkOverlap(this, this.player)) {
+                    this.putInHand();
+                }
+            }
         }, this)
 
 
