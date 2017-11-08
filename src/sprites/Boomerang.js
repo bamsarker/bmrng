@@ -7,6 +7,8 @@ let playerOffset = {
 }
 
 let launchId = 0
+let baseSpinSpeed = 75
+let spinSpeed = baseSpinSpeed
 
 export default class extends Phaser.Sprite {
     constructor({game, x, y, asset, player}) {
@@ -30,6 +32,8 @@ export default class extends Phaser.Sprite {
         this.collisionCheck = function () {
         }
         this.state = 'flying'
+
+        spinSpeed = baseSpinSpeed * power
 
         launchId++
 
@@ -65,7 +69,6 @@ export default class extends Phaser.Sprite {
             }
         }, this)
 
-
         this.tween.y = game.add.tween(this.body.velocity);
 
         let yTime = 2000 * power;
@@ -82,10 +85,12 @@ export default class extends Phaser.Sprite {
         this.state = 'inHand';
         this.tween.x.stop();
         this.tween.y.stop();
+        this.angle = 0
+        this.position.x = this.player.position.x + playerOffset.x
+        this.position.y = this.player.position.y + playerOffset.y
     }
 
     extendTrail() {
-        //this.bmd.context.strokeStyle = 'rgba(0,' + Math.floor((this.tween.x.timeline.reduce(function(total,td){ return total + td.percent },0) / this.tween.x.timeline.length) * 255) + ',' + (255 - Math.floor((this.tween.y.timeline.reduce(function(total,td){ return total + td.percent },0) / this.tween.y.timeline.length) * 255)) + ', 0.25)'
         this.bmd.context.strokeStyle = 'rgba(100,100,100,0.1)'
         this.bmd.context.lineWidth = 3
         this.bmd.context.lineJoin = 'round'
@@ -101,7 +106,7 @@ export default class extends Phaser.Sprite {
             this.position.x = this.player.position.x + playerOffset.x
             this.position.y = this.player.position.y + playerOffset.y
         } else if (this.state === 'flying') {
-            this.angle -= 50
+            this.angle -= spinSpeed
             this.extendTrail()
             this.prevPos = {x:this.position.x, y: this.position.y};
             this.collisionCheck()

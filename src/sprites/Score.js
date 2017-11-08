@@ -1,8 +1,7 @@
-
-
 const scoreLabel = 'Score: '
 const amounts = {
-    target: 10
+    target: 10,
+    mole: 25
 }
 let launchId;
 let prevLaunchId;

@@ -5,6 +5,7 @@ import Meter from '../sprites/Meter'
 import Boomerang from '../sprites/Boomerang'
 import Target from '../sprites/Target'
 import Score from '../sprites/Score'
+import Mole from '../sprites/Mole'
 
 export default class extends Phaser.State {
     init() {
@@ -51,6 +52,12 @@ export default class extends Phaser.State {
             x: 10,
             y: 10
         })
+        this.mole = new Mole({
+            game: this.game,
+            x: this.world.centerX,
+            y: this.world.centerY,
+            boomerang: this.boomerang
+        })
 
         this.targets = Phaser.ArrayUtils.numberArray(0,2)
             .map(function(i){
@@ -71,7 +78,7 @@ export default class extends Phaser.State {
         this.game.add.existing(this.boomerang)
         this.game.add.existing(this.meter.bg)
         this.game.add.existing(this.meter)
-
+        this.game.add.existing(this.mole)
 
         this.game.checkOverlap = function(spriteA, spriteB) {
 
@@ -79,8 +86,15 @@ export default class extends Phaser.State {
             let boundsB = spriteB.getBounds();
 
             return Phaser.Rectangle.intersects(boundsA, boundsB);
-
         }
+
+        this.game.getRandomTargetPosition = function() {
+            let padding = 32
+            return {
+                x: this.game.rnd.integerInRange(padding, this.game.width - padding),
+                y: this.game.rnd.integerInRange(padding, this.game.height - padding - (this.game.height / 4))
+            }
+        }.bind(this)
     }
 
     render() {

@@ -55,14 +55,6 @@ export default class extends Phaser.Sprite {
         this.position.y = pos.y
     }
 
-    getRandomPosition() {
-        let padding = 32
-        return {
-            x: game.rnd.integerInRange(padding, game.width - padding),
-            y: game.rnd.integerInRange(padding, game.height - padding - (game.height / 4))
-        }
-    }
-
     emit() {
         this.emitter.x = this.position.x
         this.emitter.y = this.position.y - 20
@@ -79,7 +71,7 @@ export default class extends Phaser.Sprite {
 
             this.exit()
                 .then(function(){
-                    this.moveTo(this.getRandomPosition())
+                    this.moveTo(game.getRandomTargetPosition())
                     return this.enter()
                 }.bind(this))
                 .then(function(){
