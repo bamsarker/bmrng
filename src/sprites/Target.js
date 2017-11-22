@@ -58,14 +58,14 @@ export default class extends Phaser.Sprite {
     emit() {
         this.emitter.x = this.position.x
         this.emitter.y = this.position.y - 20
-        this.emitter.start(true, 350, null, 5)
+        this.emitter.start(true, 1000, null, 50)
     }
 
     update() {
         if (game.checkOverlap(this, this.boomerang) && this.boomerang.state === 'flying' && this.active) {
             this.active = false
 
-            game.score.add('target')
+            game.score.add('target', { x: this.position.x, y: this.position.y })
 
             this.emit()
 

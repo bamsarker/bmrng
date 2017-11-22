@@ -17,6 +17,7 @@ export default class extends Phaser.State {
     this.load.image('moleWarn', 'assets/images/moleWarn.png')
     this.load.image('target', 'assets/images/target.png')
     this.load.image('meter', 'assets/images/meter.png')
+    this.load.image('squareButton', 'assets/images/squareButton.png')
     this.load.image('targetParticle', 'assets/images/targetParticle.png')
     this.load.image('meterBG', 'assets/images/meterBG.png')
     this.load.image('boomerang', 'assets/images/boomerang.png')

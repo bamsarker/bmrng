@@ -49,7 +49,7 @@ export default class extends Phaser.Sprite {
         this.tween.x = game.add.tween(this.body.velocity);
 
         let xTime = 2100 * power;
-        let xTarget = 790 * power;
+        let xTarget = 950 * power;
         this.body.velocity.x = xTarget;
         this.tween.x.to({x: 0}, xTime / 4, 'Linear');
         this.tween.x.to({x: -xTarget}, xTime / 4, 'Linear');
@@ -60,13 +60,7 @@ export default class extends Phaser.Sprite {
         this.tween.x.start();
 
         this.tween.x.onComplete.add(function(){
-            this.state = 'onFloor'
-
-            this.collisionCheck = function () {
-                if (this.game.checkOverlap(this, this.player)) {
-                    this.putInHand();
-                }
-            }
+            this.game.gameOver();
         }, this)
 
         this.tween.y = game.add.tween(this.body.velocity);
@@ -119,13 +113,13 @@ export default class extends Phaser.Sprite {
                 }
             }
             if (this.position.y > game.height + 32) {
-                this.putInHand();
+                this.game.gameOver();
             }
-        } else if (this.state === 'onFloor') {
-            if (this.position.x > game.width || this.position.x < 0)
-                this.putInHand()
-            else
-                this.collisionCheck()
         }
+    }
+
+    kill(killChildren) {
+        this.bmd.clear()
+        this.kill()
     }
 }

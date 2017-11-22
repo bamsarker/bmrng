@@ -1,12 +1,15 @@
+import Message from './Message'
+
 const scoreLabel = 'Score: '
 const amounts = {
-    target: 10,
-    mole: 25
+    target: 20,
+    mole: 50
 }
 let launchId;
 let prevLaunchId;
 let collected = 0;
 let score = 0;
+let scoreDisplay = 0;
 
 export default class {
     constructor({game, x, y}) {
@@ -22,11 +25,23 @@ export default class {
         this.text.smoothed = false
     }
 
-    add(type) {
+    createMessage(pos, type) {
+        new Message({
+            game: this.game,
+            x: pos.x,
+            y: pos.y,
+            level: collected - 1,
+            type: type
+        })
+    }
+
+    add(type, pos) {
         collected++
         score += amounts[type] * ((launchId === prevLaunchId) ? collected : 1)
-        this.text.setText(scoreLabel + score)
         prevLaunchId = launchId
+
+        if (!!pos)
+            this.createMessage(pos, type)
     }
 
     setLaunchId(_id) {
@@ -35,6 +50,14 @@ export default class {
     }
 
     update() {
+        if (scoreDisplay < score) {
+            scoreDisplay++;
 
+            this.text.setText(scoreLabel + scoreDisplay);
+        }
+    }
+
+    kill() {
+        this.text.kill(true)
     }
 }

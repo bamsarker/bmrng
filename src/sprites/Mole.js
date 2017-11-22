@@ -25,6 +25,16 @@ export default class extends Phaser.Sprite {
         this.mole.mask = this.squareMask;
 
         this.wait()
+
+
+        this.emitter = game.add.emitter(0,0, 100);
+        this.emitter.makeParticles('targetParticle')
+        this.emitter.tint = 0xFF0000;
+        this.emitter.gravity = 400
+        let spd = 200
+        this.emitter.minParticleSpeed.setTo(-spd, -spd)
+        this.emitter.maxParticleSpeed.setTo(spd, spd)
+
     }
 
     warn() {
@@ -48,7 +58,7 @@ export default class extends Phaser.Sprite {
         self.mole.visible = true
         jumping = true
         return new Promise(function(resolve){
-            let dur = 1000
+            let dur = 2000
             self.jumpTween = game.add.tween(self.mole.position)
             self.jumpTween.to({y: originY - 32}, dur * 0.5, Phaser.Easing.Quintic.Out)
             self.jumpTween.to({y: originY + 16}, dur * 0.5, Phaser.Easing.Quintic.In)
@@ -93,9 +103,18 @@ export default class extends Phaser.Sprite {
         }, this)
     }
 
+    emit() {
+        this.emitter.x = this.position.x
+        this.emitter.y = this.position.y - 20
+        this.emitter.start(true, 1000, null, 50)
+
+        this.emitter.setAll('tint', this.emitter.tint);
+    }
+
     update() {
         if (jumping && game.checkOverlap(this.mole, this.boomerang)) {
-            game.score.add('mole')
+            this.emit()
+            game.score.add('mole', this.position)
             jumping = false
             this.mole.visible = false
         }

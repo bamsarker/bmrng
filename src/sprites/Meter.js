@@ -21,7 +21,7 @@ export default class extends Phaser.Sprite {
     }
 
     powerUp () {
-        this.power += 4 / 60;
+        this.power += 3 / 60;
         this.sPower = 1 + Math.sin(this.power);
     }
 
