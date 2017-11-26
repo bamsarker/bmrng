@@ -103,8 +103,8 @@ export default class extends Phaser.State {
             x: 10,
             y: this.game.height - 2,
             asset: 'meter',
-            bgAsset: 'meterBG',
-            boomerang: this.boomerang
+            boomerang: this.boomerang,
+            player: this.player
         })
         this.game.score = new Score({
             game: this.game,
@@ -135,7 +135,6 @@ export default class extends Phaser.State {
 
         this.game.add.existing(this.player)
         this.game.add.existing(this.boomerang)
-        this.game.add.existing(this.meter.bg)
         this.game.add.existing(this.meter)
         this.game.add.existing(this.mole)
     }
