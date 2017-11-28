@@ -9,7 +9,7 @@ export default class extends Phaser.Sprite {
         this.tint = 0xbbbbbb
         this.alpha = 0;
 
-        this.throwKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.throwKey = game.input.keyboard.addKey(Phaser.Keyboard.Z);
 
         this.maxPower = 3;
         this.power = this.maxPower / 2;
@@ -31,7 +31,7 @@ export default class extends Phaser.Sprite {
             this.position.y = this.player.position.y - (1 + (this.sPower * this.sPower) * 410)
             this.position.x = this.player.position.x
             game.input.keyboard.onUpCallback = function (e) {
-                if (e.keyCode === Phaser.Keyboard.SPACEBAR) {
+                if (e.keyCode === this.throwKey.keyCode) {
                     game.add.tween(this).to( { alpha: 0 }, 500, Phaser.Easing.Linear.None, true, 0, 0, false);
                     this.boomerang.launch(this.sPower);
                     this.power = this.maxPower / 2;

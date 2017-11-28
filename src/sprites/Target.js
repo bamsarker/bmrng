@@ -16,6 +16,8 @@ export default class extends Phaser.Sprite {
         let spd = 200
         this.emitter.minParticleSpeed.setTo(-spd, -spd)
         this.emitter.maxParticleSpeed.setTo(spd, spd)
+
+        this.targetHitSound = game.add.audio('targetHit')
     }
 
     enter() {
@@ -34,9 +36,19 @@ export default class extends Phaser.Sprite {
         })
     }
 
+    activate() {
+        this.active = true;
+        this.moveTo(game.getRandomTargetPosition())
+        this.enter();
+        this.activationPromise = new Promise((resolve)=>{
+            this.resolveActivation = resolve;
+        }, this)
+        return this.activationPromise;
+    }
+
     exit() {
         let self = this
-        return new Promise(function(resolve){
+        return new Promise((resolve)=>{
             let dur = 250
             self.scaleTween = game.add.tween(self.scale)
             self.scaleTween.to({x: 0}, dur * 0.5, null, true, dur * 0.5)
@@ -69,10 +81,11 @@ export default class extends Phaser.Sprite {
 
             this.emit()
 
+            this.targetHitSound.play();
+
             this.exit()
                 .then(function(){
-                    this.moveTo(game.getRandomTargetPosition())
-                    return this.enter()
+                    this.resolveActivation()
                 }.bind(this))
                 .then(function(){
                     this.active = true

@@ -22,7 +22,19 @@ export default class extends Phaser.State {
     this.load.image('meterBG', 'assets/images/meterBG.png')
     this.load.image('boomerang', 'assets/images/boomerang.png')
     this.load.image('edgePointer', 'assets/images/edgePointer.png')
-    this.load.image('player', 'assets/images/player.png')
+    this.load.image('player', 'assets/images/player.png');
+
+    [
+        'catchBoomerang',
+        'chargeMeter',
+        'spin',
+        'targetHit',
+        'launch',
+        'count',
+        'levelComplete'
+        ].map(function(soundName){
+        this.load.audio(soundName, 'assets/audio/'+soundName+'.wav');
+    }, this)
   }
 
   create () {

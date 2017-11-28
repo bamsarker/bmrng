@@ -3,7 +3,7 @@ import Message from './Message'
 const scoreLabel = 'Score: '
 const amounts = {
     target: 20,
-    mole: 50
+    mole: -50
 }
 let launchId;
 let prevLaunchId;
@@ -13,7 +13,8 @@ let scoreDisplay = 0;
 
 export default class {
     constructor({game, x, y}) {
-
+        this.game = game;
+        this.countSound = game.add.audio('count')
         this.create(x, y)
     }
 
@@ -50,8 +51,11 @@ export default class {
     }
 
     update() {
+        if (this.gameOver) return;
+
         if (scoreDisplay < score) {
             scoreDisplay++;
+            this.countSound.play()
 
             this.text.setText(scoreLabel + scoreDisplay);
         }

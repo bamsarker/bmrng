@@ -3,11 +3,10 @@ import Phaser from 'phaser'
 import Player from '../sprites/Player'
 import Meter from '../sprites/Meter'
 import Boomerang from '../sprites/Boomerang'
-import Target from '../sprites/Target'
 import Score from '../sprites/Score'
-import Mole from '../sprites/Mole'
 import EndGame from '../sprites/EndGame'
 import Button from '../sprites/Button'
+import LevelManager from '../sprites/LevelManager'
 
 export default class extends Phaser.State {
     init() {
@@ -30,12 +29,17 @@ export default class extends Phaser.State {
 
         this.addGameElements()
 
-        this.game.gameOver = function() {
+        this.game.gameOver = function(type) {
             if (!this.game.endMessage) {
+
+                this.player.gameOver = true;
+                this.game.score.gameOver = true;
+
                 this.game.endMessage = new EndGame({
                     game: this.game,
                     x: this.world.centerX,
-                    y: this.world.centerY
+                    y: this.world.centerY,
+                    type: type
                 })
 
                 this.restartButton = new Button({
@@ -67,21 +71,16 @@ export default class extends Phaser.State {
                 x: this.game.rnd.integerInRange(padding, this.game.width - padding),
                 y: this.game.rnd.integerInRange(padding, this.game.height - padding - (this.game.height / 4))
             }
-        }.bind(this)
-    }
+        }.bind(this);
 
-    removeGameElements() {
-        [
-            this.player,
-            this.boomerang,
-            this.meter,
-            this.game.score,
-            this.mole,
-            this.restartButton,
-            this.game.endMessage
-        ].concat(this.targets)
-            .filter(element => { return !!element } )
-            .map(element => { element.kill(true) })
+        this.game.delay = (delay) => {
+            return new Promise((resolve) => {
+                this.game.time.events.add(delay, resolve);
+            })
+        };
+
+        this.levelManager.createLevel()
+        this.levelManager.activateLevel()
     }
 
     addGameElements() {
@@ -111,32 +110,15 @@ export default class extends Phaser.State {
             x: 10,
             y: 10
         })
-        this.mole = new Mole({
+
+        this.levelManager = new LevelManager({
             game: this.game,
-            x: this.world.centerX,
-            y: this.world.centerY,
             boomerang: this.boomerang
-        })
-
-        this.targets = Phaser.ArrayUtils.numberArray(0,2)
-            .map((i) => {
-                let target = new Target({
-                    game: this.game,
-                    x: this.game.width / 4 * (i + 1),
-                    y: this.game.height / 4,
-                    boomerang: this.boomerang
-                })
-
-                this.game.add.existing(target)
-
-
-                this.game.time.events.add(500, function(){ target.enter() }, this)
-            }, this)
+        });
 
         this.game.add.existing(this.player)
         this.game.add.existing(this.boomerang)
         this.game.add.existing(this.meter)
-        this.game.add.existing(this.mole)
     }
 
     update() {

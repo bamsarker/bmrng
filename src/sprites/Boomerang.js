@@ -25,6 +25,10 @@ export default class extends Phaser.Sprite {
         this.pointer = new Pointer({game: game, target: this, color: this.tint})
         game.add.existing(this.pointer)
 
+        this.spinSound = game.add.audio('spin')
+        this.catchSound = game.add.audio('catchBoomerang')
+        this.launchSound = game.add.audio('launch')
+
     }
 
     launch(power) {
@@ -40,6 +44,8 @@ export default class extends Phaser.Sprite {
         game.score.setLaunchId(launchId)
 
         this.bmd.cls()
+
+        this.launchSound.play()
 
         if (this.tween == undefined)
             this.tween = {}
@@ -59,8 +65,8 @@ export default class extends Phaser.Sprite {
 
         this.tween.x.start();
 
-        this.tween.x.onComplete.add(function(){
-            this.game.gameOver();
+        this.tween.x.onComplete.add(function() {
+            this.game.gameOver('boomerang');
         }, this)
 
         this.tween.y = game.add.tween(this.body.velocity);
@@ -76,6 +82,7 @@ export default class extends Phaser.Sprite {
     }
 
     putInHand() {
+        this.catchSound.play()
         this.state = 'inHand';
         this.tween.x.stop();
         this.tween.y.stop();
@@ -99,7 +106,10 @@ export default class extends Phaser.Sprite {
         if (this.state === 'inHand') {
             this.position.x = this.player.position.x + playerOffset.x
             this.position.y = this.player.position.y + playerOffset.y
+            this.spinSound.pause()
         } else if (this.state === 'flying') {
+            if (!this.spinSound.isPlaying)
+                this.spinSound.play()
             this.angle -= spinSpeed
             this.extendTrail()
             this.prevPos = {x:this.position.x, y: this.position.y};
@@ -113,13 +123,9 @@ export default class extends Phaser.Sprite {
                 }
             }
             if (this.position.y > game.height + 32) {
-                this.game.gameOver();
+                this.game.gameOver('boomerang');
             }
         }
     }
 
-    kill(killChildren) {
-        this.bmd.clear()
-        this.kill()
-    }
 }

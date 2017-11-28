@@ -24,9 +24,6 @@ export default class extends Phaser.Sprite {
 
         this.mole.mask = this.squareMask;
 
-        this.wait()
-
-
         this.emitter = game.add.emitter(0,0, 100);
         this.emitter.makeParticles('targetParticle')
         this.emitter.tint = 0xFF0000;
@@ -35,6 +32,8 @@ export default class extends Phaser.Sprite {
         this.emitter.minParticleSpeed.setTo(-spd, -spd)
         this.emitter.maxParticleSpeed.setTo(spd, spd)
 
+        this.moveTo(game.getRandomTargetPosition())
+        this.wait()
     }
 
     warn() {
@@ -117,6 +116,7 @@ export default class extends Phaser.Sprite {
             game.score.add('mole', this.position)
             jumping = false
             this.mole.visible = false
+            game.gameOver('mole')
         }
     }
 }

@@ -1,7 +1,14 @@
-const endGameText = 'You lost your boomerang!\nBetter luck next time.'
+const typeTexts = {
+        boomerang:  'You lost your boomerang!',
+        mole: 'Don\'t kill pandas.'
+    },
+    stdText = '\nBetter luck next time.';
+let endGameText = '';
 
 export default class {
-    constructor({game, x, y}) {
+    constructor({game, x, y, type}) {
+
+        endGameText = typeTexts[type] + stdText;
 
         this.create(x, y)
     }
@@ -14,10 +21,6 @@ export default class {
         this.text.fill = '#babb9d'
         this.text.smoothed = false
         this.text.anchor.setTo(0.5)
-    }
-
-    update() {
-
     }
 
     kill() {

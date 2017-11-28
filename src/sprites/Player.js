@@ -15,6 +15,8 @@ export default class extends Phaser.Sprite {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
+        if (this.gameOver) return;
+
         if (game.cursors.left.isDown)
         {
             this.body.velocity.x = -this.moveSpeed;
