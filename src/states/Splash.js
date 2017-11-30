@@ -23,6 +23,8 @@ export default class extends Phaser.State {
     this.load.image('boomerang', 'assets/images/boomerang.png')
     this.load.image('edgePointer', 'assets/images/edgePointer.png')
     this.load.image('player', 'assets/images/player.png');
+    this.load.image('arrowButton', 'assets/images/arrowButton.png');
+    this.load.image('boomerButton', 'assets/images/boomerButton.png');
 
     [
         'catchBoomerang',

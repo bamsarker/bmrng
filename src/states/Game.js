@@ -7,6 +7,7 @@ import Score from '../sprites/Score'
 import EndGame from '../sprites/EndGame'
 import Button from '../sprites/Button'
 import LevelManager from '../sprites/LevelManager'
+import ControlsUI from '../sprites/ControlsUI'
 
 export default class extends Phaser.State {
     init() {
@@ -90,6 +91,10 @@ export default class extends Phaser.State {
             y: this.game.height - 50,
             asset: 'player'
         })
+        this.controlsUI = new ControlsUI({
+            game: this.game,
+            player: this.player
+        })
         this.boomerang = new Boomerang({
             game: this.game,
             x: this.world.centerX,
@@ -119,6 +124,7 @@ export default class extends Phaser.State {
         this.game.add.existing(this.player)
         this.game.add.existing(this.boomerang)
         this.game.add.existing(this.meter)
+        this.game.add.existing(this.controlsUI)
     }
 
     update() {

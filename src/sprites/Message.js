@@ -11,7 +11,8 @@ const messages = [
     getMessage = function(level, type) {
         if (type === 'mole')
             return (level === 0) ? Phaser.ArrayUtils.getRandomItem(pandaMessages) : `x${level + 1}\n${Phaser.ArrayUtils.getRandomItem(pandaMessages)}`
-
+        if (level >= messages.length)
+            level = messages.length - 1;
         return (level === 0) ? messages[level] : `x${level + 1}\n${messages[level]}`;
     }
 
